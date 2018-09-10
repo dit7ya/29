@@ -13,3 +13,5 @@ model.add(Dense(1, activation='linear', kernel_initializer = 'he_normal'))
 
 model.compile(loss='mse', optimizer='adam')
 model.summary()
+
+model.save('my_model.h5')

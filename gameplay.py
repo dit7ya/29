@@ -4,42 +4,7 @@ from cards import Card
 from operator import attrgetter
 import numpy as np
 
-deck = [Card('Ace', 'Spades', 3, 1, 1),
-        Card('King', 'Spades', 5, 0, 2),
-        Card('Queen', 'Spades', 6, 0, 3),
-        Card('Jack', 'Spades', 1, 3, 4),
-        Card('10', 'Spades', 4, 1, 5),
-        Card('9', 'Spades', 2, 2, 6),
-        Card('8', 'Spades', 8, 0, 7),
-        Card('7', 'Spades', 7, 0, 8),
-
-        Card('Ace', 'Clubs', 3, 1, 9),
-        Card('King', 'Clubs', 5, 0, 10),
-        Card('Queen', 'Clubs', 6, 0, 11),
-        Card('Jack', 'Clubs', 1, 3, 12),
-        Card('10', 'Clubs', 4, 1, 13),
-        Card('9', 'Clubs', 2, 2, 14),
-        Card('8', 'Clubs', 8, 0, 15),
-        Card('7', 'Clubs', 7, 0, 16),
-
-        Card('Ace', 'Hearts', 3, 1, 17),
-        Card('King', 'Hearts', 5, 0, 18),
-        Card('Queen', 'Hearts', 6, 0, 19),
-        Card('Jack', 'Hearts', 1, 3, 20),
-        Card('10', 'Hearts', 4, 1, 21),
-        Card('9', 'Hearts', 2, 2, 22),
-        Card('8', 'Hearts', 8, 0, 23),
-        Card('7', 'Hearts', 7, 0, 24),
-
-        Card('Ace', 'Diamonds', 3, 1, 25),
-        Card('King', 'Diamonds', 5, 0, 26),
-        Card('Queen', 'Diamonds', 6, 0, 27),
-        Card('Jack', 'Diamonds', 1, 3, 28),
-        Card('10', 'Diamonds', 4, 1, 29),
-        Card('9', 'Diamonds', 2, 2, 30),
-        Card('8', 'Diamonds', 8, 0, 31),
-        Card('7', 'Diamonds', 8, 0, 32)
-        ]
+from cards import deck
 
 
 def decision_logic(card1, card2, card3, card4, trump_suit, trump_revealed):
@@ -82,4 +47,68 @@ def points_in_trick(card1: Card, card2: Card, card3: Card, card4: Card):
     points: int = card1.get_point() + card2.get_point() + card3.get_point() + card4.get_point()
     return points
 
-agent1 =
+
+def convert_ID(list_cards):
+    list_IDs = []
+    for card in list_cards:
+        list_IDs.append(card.get_ID())
+
+    return list_IDs
+
+
+def trick(agents, public_info, private_infos, trump_info, last_winner, states, points_dict):
+    first_player = agents[last_winner]
+    second_player = agents[last_winner % 4 + 1]
+    third_player = agents[((last_winner % 4) + 1) % 4 + 1]
+    fourth_player = agents[(((last_winner % 4) + 1) % 4 + 1) % 4 + 1]
+
+    # first player plays
+
+    card1, public_info, private_infos, trump_info, states, running_suit = first_player.play_card(public_info,
+                                                                                                 private_infos,
+                                                                                                 trump_info, states,
+                                                                                                 running_suit=0)
+
+    # second player playes
+
+    card2, public_info, private_infos, trump_info, states, running_suit = second_player.play_card(public_info,
+                                                                                                  private_infos,
+                                                                                                  trump_info, states,
+                                                                                                  running_suit)
+
+    # third player playes
+
+    card3, public_info, private_infos, trump_info, states, running_suit = third_player.play_card(public_info,
+                                                                                                 private_infos,
+                                                                                                 trump_info, states,
+                                                                                                 running_suit)
+
+    # fourth player plays
+
+    card4, public_info, private_infos, trump_info, states, running_suit = fourth_player.play_card(public_info,
+                                                                                                  private_infos,
+                                                                                                  trump_info, states,
+                                                                                                  running_suit)
+
+    trump_suit = trump_info[1]
+
+    # winner card decided
+    winning_card = decision_logic(card1, card2, card3, card4, trump_suit, trump_revealed=False)
+
+    if winning_card == card1:
+        winner = last_winner
+    elif winning_card == card2:
+        winner = last_winner % 4 + 1
+
+    elif winning_card == card3:
+        winner = ((last_winner % 4) + 1) % 4 + 1
+
+    elif winning_card == card4:
+        winner = (((last_winner % 4) + 1) % 4 + 1) % 4 + 1
+
+    # points dict is updated
+
+    points_dict[winner] += points_in_hand(card1, card2, card3, card4)
+
+    return public_info, private_infos, trump_info, winner, states, points_dict
+
