@@ -99,6 +99,7 @@ def play_human_game(agents):
     G = calculate_G(reward_list, gamma=0.9)
     final_states = np.reshape(states, (32, 41))
     final_G = np.reshape(G, (32, 1))
+    print('Points for this game is:', points_dict)
 
     return final_states, final_G
 

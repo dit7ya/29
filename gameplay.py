@@ -110,6 +110,7 @@ def trick(agents, public_info, private_infos, trump_info, last_winner, states, p
     # points dict is updated
 
     points_dict[winner] += points_in_trick(card1, card2, card3, card4)
+    points_dict[(winner % 4 + 1) % 4 + 1] += points_in_trick(card1, card2, card3, card4)*.9 # partner gets 90% point
 
     return public_info, private_infos, trump_info, winner, states, points_dict
 

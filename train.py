@@ -2,7 +2,7 @@ from agents import Bot
 from keras.models import load_model
 from gameplay import *
 
-num_games = 1000
+num_games = 1
 
 
 def play_m_games(m):
