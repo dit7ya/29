@@ -79,6 +79,9 @@ def play_human_game(agents):
                      2: agents[2].get_private_info(),
                      3: agents[3].get_private_info(),
                      4: agents[4].get_private_info()}
+
+    print(private_infos)
+
     trump_info = [0, np.random.choice(['Spades', 'Clubs', 'Hearts', 'Diamonds'])]
     print('Trump suit is', trump_info[1])
 

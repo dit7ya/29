@@ -38,7 +38,7 @@ def get_legal_actions(private_info, running_suit):
 
 def reveal_trump(trump_info):
     trump_info[0] = 1
-    print('Trump has been revealed. It is: ', trump_info[1])
+    # print('Trump has been revealed. It is: ', trump_info[1])
     return trump_info
 
 def suit_map(suit):
@@ -115,6 +115,14 @@ def choose_card(public_info, private_info, trump_info, running_suit, epsilon=0.1
 
     return card, trump_info
 
+def get_cards_from_IDs(IDs):
+    cards = []
+    card_names = {}
+    for ID in IDs:
+        cards.append(get_card(ID, deck))
+        card_names[ID] = get_card(ID, deck).__str__()
+    return cards, card_names
+
 
 class Agent:
     name: str
@@ -162,8 +170,8 @@ class Human(Agent):
         player_state = get_state(public_info, private_info, trump_info)
         states = write_state_that_was_used(player_state, states)
         legal_actions, can_play_trump = get_legal_actions(private_info, running_suit)
-
-        print('It is your turn', self.get_name(), 'Legal moves are: ', legal_actions)
+        _, legal_cards = get_cards_from_IDs(legal_actions)
+        print('It is your turn,', self.get_name(), '.', 'Legal moves are: ', legal_cards)
 
         if can_play_trump:
             trump_choice = input('Do you want to reveal/play Trump? 1/0')
