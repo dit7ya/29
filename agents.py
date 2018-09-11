@@ -7,8 +7,6 @@ from keras.models import load_model
 model = load_model('my_model.h5')
 
 
-
-
 def get_card(ID, deck):
     card = deck[(int(ID) - 1)]
 
@@ -29,7 +27,7 @@ def get_legal_actions(private_info, running_suit):
         else:
             pass
 
-    if not legal_cards:
+    if legal_cards == [] or legal_cards == private_info:
         can_play_trump = True
         for ID in private_info:
             if ID != 0:
@@ -38,11 +36,22 @@ def get_legal_actions(private_info, running_suit):
     return legal_cards, can_play_trump
 
 
-def reveal_trump(trump_info, can_play_trump):
-    assert isinstance(can_play_trump, int)
-    if can_play_trump:
-        trump_info[0] = 1
+def reveal_trump(trump_info):
+    trump_info[0] = 1
+    print('Trump has been revealed. It is: ', trump_info[1])
     return trump_info
+
+def suit_map(suit):
+  if suit == 'Spades':
+    num = 1
+  elif suit == 'Clubs':
+    num = 2
+  elif suit == 'Hearts':
+    num = 3
+  else:
+    num = 4
+  return num
+
 
 
 def get_state(public_info, private_info, trump_info):
@@ -78,8 +87,8 @@ def choose_card(public_info, private_info, trump_info, running_suit, epsilon=0.1
 
     legal_actions, can_play_trump = get_legal_actions(private_info, running_suit)
 
-    if can_play_trump == True and trump_info[0] == 0 and np.random.rand() > 0.4:
-        trump_info = reveal_trump(trump_info, can_play_trump)
+    if can_play_trump == True and trump_info[0] == 0 and np.random.rand() > 0.9:
+        trump_info = reveal_trump(trump_info)
 
     # print(a)
     Q_state = {}
@@ -92,7 +101,7 @@ def choose_card(public_info, private_info, trump_info, running_suit, epsilon=0.1
 
         possible_state = get_state(possible_public_info, possible_private_info, trump_info)
 
-        Q_state[action] = model.predict(np.array(possible_state))
+        Q_state[action] = np.float(model.predict(np.array(possible_state)))
 
         # Q_state[action] = np.linalg.norm(state)*action # just for testing
     # print(Q_state)
@@ -126,6 +135,9 @@ class Agent:
     def get_agent_num(self):
         return self.agent_num
 
+    def get_private_info(self):
+        return self.private_info
+
     def get_partner_num(self):
         return self.partner_num
 
@@ -151,14 +163,16 @@ class Human(Agent):
         states = write_state_that_was_used(player_state, states)
         legal_actions, can_play_trump = get_legal_actions(private_info, running_suit)
 
-        if can_play_trump:
-            trump_choice = input('Do you want to reveal Trump? 1/0')
-            if trump_choice == 1:
-                trump_info = reveal_trump(trump_info, can_play_trump)
+        print('It is your turn', self.get_name(), 'Legal moves are: ', legal_actions)
 
-        print('Legal moves are: ', legal_actions)
+        if can_play_trump:
+            trump_choice = input('Do you want to reveal/play Trump? 1/0')
+            if trump_choice == 1:
+                trump_info = reveal_trump(trump_info)
+
         # cards = [get_card(ID, deck) for ID in private_info]
         # print('You have the cards, ', cards)
+        #print()
         card_ID = input('Enter the card_ID you want to play.')
 
         card = get_card(card_ID, deck)
