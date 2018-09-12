@@ -4,7 +4,7 @@ from cards import deck
 
 from keras.models import load_model
 
-model = load_model('my_model.h5')
+model = load_model('second_model.h5')
 
 
 def get_card(ID, deck):
@@ -82,12 +82,17 @@ def update_public_info(public_info, played_card_ID):
     return public_info
 
 
+
+
+
+
+
 def choose_card(public_info, private_info, trump_info, running_suit, epsilon=0.1):
     # state = self.get_state(public_info, private_info, trump_info)
 
     legal_actions, can_play_trump = get_legal_actions(private_info, running_suit)
 
-    if can_play_trump == True and trump_info[0] == 0 and np.random.rand() > 0.9:
+    if can_play_trump == True and trump_info[0] == 0 and np.random.rand() > 0.5:
         trump_info = reveal_trump(trump_info)
 
     # print(a)
@@ -161,6 +166,7 @@ class Bot(Agent):
         public_info = update_public_info(public_info, played_card_ID=card.get_ID())
         running_suit = card.get_suit()
         return card, public_info, private_infos, trump_info, states, running_suit
+
 
 
 class Human(Agent):

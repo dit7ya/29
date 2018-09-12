@@ -80,7 +80,10 @@ def play_human_game(agents):
                      3: agents[3].get_private_info(),
                      4: agents[4].get_private_info()}
 
-    print(private_infos)
+    print(agents[1], 'has cards', '\n', get_cards_from_IDs(private_infos[1])[1], '\n')
+    print(agents[2], 'has cards', '\n', get_cards_from_IDs(private_infos[2])[1], '\n')
+    print(agents[3], 'has cards', '\n', get_cards_from_IDs(private_infos[3])[1], '\n')
+    print(agents[4], 'has cards', '\n', get_cards_from_IDs(private_infos[4])[1], '\n')
 
     trump_info = [0, np.random.choice(['Spades', 'Clubs', 'Hearts', 'Diamonds'])]
     print('Trump suit is', trump_info[1])
@@ -95,7 +98,7 @@ def play_human_game(agents):
         public_info, private_infos, trump_info, winner, states, points_dict = trick_human(agents, public_info, private_infos,
                                                                                     trump_info, last_winner, states,
                                                                                     points_dict)
-        print('Winner from the previous hand is: ', agents[winner])
+        print('Winner from the previous hand is: ', agents[winner], '\n', '\n')
         reward_list = points_dict_to_reward_list(points_dict, reward_list)
         last_winner = winner
 
