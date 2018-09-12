@@ -4,7 +4,7 @@ from cards import deck
 
 from keras.models import load_model
 
-model = load_model('second_model.h5')
+model = load_model('third_model.h5')
 
 
 def get_card(ID, deck):
@@ -27,7 +27,7 @@ def get_legal_actions(private_info, running_suit):
         else:
             pass
 
-    if legal_cards == [] or legal_cards == private_info:
+    if not legal_cards:
         can_play_trump = True
         for ID in private_info:
             if ID != 0:
@@ -38,7 +38,7 @@ def get_legal_actions(private_info, running_suit):
 
 def reveal_trump(trump_info):
     trump_info[0] = 1
-    # print('Trump has been revealed. It is: ', trump_info[1])
+    #print('Trump has been revealed. It is: ', trump_info[1])
     return trump_info
 
 def suit_map(suit):
@@ -82,11 +82,6 @@ def update_public_info(public_info, played_card_ID):
     return public_info
 
 
-
-
-
-
-
 def choose_card(public_info, private_info, trump_info, running_suit, epsilon=0.1):
     # state = self.get_state(public_info, private_info, trump_info)
 
@@ -119,6 +114,7 @@ def choose_card(public_info, private_info, trump_info, running_suit, epsilon=0.1
     card = get_card(card_ID, deck)
 
     return card, trump_info
+
 
 def get_cards_from_IDs(IDs):
     cards = []

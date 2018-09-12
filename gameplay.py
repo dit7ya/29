@@ -120,7 +120,8 @@ def play_one_game(agents):
                      2: agents[2].get_private_info(),
                      3: agents[3].get_private_info(),
                      4: agents[4].get_private_info()}
-    last_winner = np.random.randint(1, 5)
+    #last_winner = np.random.randint(1, 5)
+    last_winner = 1 # testing this to check if states and Gs are aligned
     states = []
     points_dict = {1: 0, 2: 0, 3: 0, 4: 0}
 

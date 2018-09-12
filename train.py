@@ -2,7 +2,7 @@ from agents import Bot
 from keras.models import load_model
 from gameplay import *
 
-num_games = 1000
+num_games = 100
 
 
 def play_m_games(m):
@@ -28,8 +28,12 @@ def play_m_games(m):
 
 states, Gs = play_m_games(num_games)
 
-model = load_model('second_model.h5')
-model.fit(states, Gs, epochs=100, verbose = 2)
 
-model.save('second_model.h5')  # creates a HDF5 file 'my_model.h5'
+for i in range(100):
+    states, Gs = play_m_games(num_games)
+    model = load_model('third_model.h5')
+    model.fit(states, Gs, epochs=50, verbose = 2)
+
+    model.save('third_model.h5')  # creates a HDF5 file 'my_model.h5'
+
 

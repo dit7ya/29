@@ -15,4 +15,4 @@ model.add(Dense(1, activation='linear', kernel_initializer = 'he_normal'))
 model.compile(loss='mse', optimizer='adam')
 model.summary()
 
-model.save('second_model.h5')
+model.save('third_model.h5')
