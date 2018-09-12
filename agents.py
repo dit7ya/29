@@ -128,7 +128,6 @@ def get_cards_from_IDs(IDs):
         card_names[ID] = get_card(ID, deck).__str__()
     return cards, card_names
 
-
 class Agent:
     name: str
     private_info: list
